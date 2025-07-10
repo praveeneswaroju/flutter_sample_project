@@ -15,4 +15,7 @@ void main() {
   test('Newlines are also valid delimiters', () {
     expect(add('2\n3,5'), 10);
   });
+  test('Supports different delimiters like //;1;2', () {
+    expect(add('//;\n1;2'), 3);
+  });
 }

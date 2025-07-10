@@ -11,5 +11,12 @@ int add(String numbers) {
   }
 
   final pattern = RegExp('[$delimiter]');
-  return numString.split(pattern).map(int.parse).reduce((a, b) => a + b);
+  final values = numString.split(pattern).map(int.parse).toList();
+
+  final negatives = values.where((n) => n < 0).toList();
+  if (negatives.isNotEmpty) {
+    throw Exception('Negatives not allowed: ${negatives.join(', ')}');
+  }
+
+  return values.reduce((a, b) => a + b);
 }

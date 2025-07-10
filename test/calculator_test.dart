@@ -18,4 +18,16 @@ void main() {
   test('Supports different delimiters like //;1;2', () {
     expect(add('//;\n1;2'), 3);
   });
+  test('Throws exception for negative numbers', () {
+    expect(
+      () => add('1,-2,3,-4'),
+      throwsA(
+        predicate(
+          (e) =>
+              e is Exception &&
+              e.toString().contains('Negatives not allowed: -2, -4'),
+        ),
+      ),
+    );
+  });
 }

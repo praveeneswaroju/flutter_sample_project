@@ -12,4 +12,7 @@ void main() {
   test('Two numbers comma-separated returns their sum', () {
     expect(add('1,2'), 3);
   });
+  test('Newlines are also valid delimiters', () {
+    expect(add('2\n3,5'), 10);
+  });
 }

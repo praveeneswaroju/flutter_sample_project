@@ -1,23 +1,36 @@
+// lib/calculator.dart
+
 int add(String numbers) {
   if (numbers.isEmpty) return 0;
 
-  String delimiter = ',|\n';
+  String delimiterPattern = ',|\\n';
   String numString = numbers;
 
+  // Custom delimiter handling
   if (numbers.startsWith('//')) {
-    final delimiterLine = numbers.split('\n')[0];
-    delimiter = RegExp.escape(delimiterLine[2]);
-    numString = numbers.substring(numbers.indexOf('\n') + 1);
+    final delimiterEndIndex = numbers.indexOf('\n');
+    final delimiterPart = numbers.substring(2, delimiterEndIndex);
+
+    final customDelimiters = <String>[];
+    final delimiterRegex = RegExp(r'\[(.*?)\]');
+    final matches = delimiterRegex.allMatches(delimiterPart);
+
+    // Handles [***], [#], [%%]
+    if (matches.isNotEmpty) {
+      for (final match in matches) {
+        customDelimiters.add(RegExp.escape(match.group(1)!));
+      }
+    } else {
+      // Single-char delimiter like //;\n1;2
+      customDelimiters.add(RegExp.escape(delimiterPart));
+    }
+
+    delimiterPattern = customDelimiters.join('|');
+    numString = numbers.substring(delimiterEndIndex + 1);
   }
 
-  final pattern = RegExp('[$delimiter]');
-  final values =
-      numString.split(pattern).map(int.parse).where((n) => n <= 1000).toList();
+  final pattern = RegExp(delimiterPattern);
+  final values = numString.split(pattern).map(int.parse).toList();
 
-  final negatives = values.where((n) => n < 0).toList();
-  if (negatives.isNotEmpty) {
-    throw Exception('Negatives not allowed: ${negatives.join(', ')}');
-  }
-
-  return values.reduce((a, b) => a + b);
+  return values.fold(0, (sum, n) => sum + n);
 }

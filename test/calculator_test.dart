@@ -33,4 +33,7 @@ void main() {
   test('Numbers greater than 1000 are ignored', () {
     expect(add('2,1002'), 2);
   });
+  test('Custom delimiter of any length', () {
+    expect(add('//[***]\n1***2***3'), 6);
+  });
 }

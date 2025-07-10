@@ -30,4 +30,7 @@ void main() {
       ),
     );
   });
+  test('Numbers greater than 1000 are ignored', () {
+    expect(add('2,1002'), 2);
+  });
 }

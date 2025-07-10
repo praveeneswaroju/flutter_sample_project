@@ -11,7 +11,8 @@ int add(String numbers) {
   }
 
   final pattern = RegExp('[$delimiter]');
-  final values = numString.split(pattern).map(int.parse).toList();
+  final values =
+      numString.split(pattern).map(int.parse).where((n) => n <= 1000).toList();
 
   final negatives = values.where((n) => n < 0).toList();
   if (negatives.isNotEmpty) {
